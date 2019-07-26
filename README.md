@@ -26,9 +26,9 @@ python3 manage.py runserver 0.0.0.0:8000
 访问：http://127.0.0.1:8000
 
 ## 预览
-![](https://github.com/leffss/django-webssh/blob/master/screenshots/1.png?raw=true)
-![](https://github.com/leffss/django-webssh/blob/master/screenshots/2.png?raw=true)
-![](https://github.com/leffss/django-webssh/blob/master/screenshots/3.png?raw=true)
-![](https://github.com/leffss/django-webssh/blob/master/screenshots/4.png?raw=true)
-![](https://github.com/leffss/django-webssh/blob/master/screenshots/5.png?raw=true)
-![](https://github.com/leffss/django-webssh/blob/master/screenshots/6.png?raw=true)
+![](https://github.com/leffss/django-webssh/blob/master/screenshots/1.PNG?raw=true)
+![](https://github.com/leffss/django-webssh/blob/master/screenshots/2.PNG?raw=true)
+![](https://github.com/leffss/django-webssh/blob/master/screenshots/3.PNG?raw=true)
+![](https://github.com/leffss/django-webssh/blob/master/screenshots/4.PNG?raw=true)
+![](https://github.com/leffss/django-webssh/blob/master/screenshots/5.PNG?raw=true)
+![](https://github.com/leffss/django-webssh/blob/master/screenshots/6.PNG?raw=true)
