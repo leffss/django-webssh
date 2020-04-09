@@ -2,9 +2,14 @@ import paramiko
 import threading
 from threading import Thread
 from django_webssh.tools.tools import get_key_obj
+import traceback
 import socket
 import json
 
+zmodemszstart = b'rz\r**\x18B00000000000000\r\x8a\x11'
+zmodemszend = b'**\x18B0800000000022d\r\x8a'
+zmodemrzstart = b'rz waiting to receive.**\x18B0100000023be50\r\x8a\x11'
+zmodemrzend = b'**\x18B0800000000022d\r\x8a'
 
 class SSH:
     def __init__(self, websocker, message):
@@ -12,6 +17,8 @@ class SSH:
         self.message = message
         self.cmd = ''
         self.res = ''
+        self.zmodem = False
+        self.zmodemOO = False
     
     # term 可以使用 ansi, linux, vt100, xterm, dumb，除了 dumb外其他都有颜色显示
     def connect(self, host, user, password=None, ssh_key=None, port=22, timeout=30,
@@ -45,8 +52,8 @@ class SSH:
             
             # 创建3个线程将服务器返回的数据发送到django websocket（1个线程都可以）
             Thread(target=self.websocket_to_django).start()
-            Thread(target=self.websocket_to_django).start()
-            Thread(target=self.websocket_to_django).start()
+            # Thread(target=self.websocket_to_django).start()
+            # Thread(target=self.websocket_to_django).start()
         except:
             self.message['status'] = 2
             self.message['message'] = 'connection faild...'
@@ -66,17 +73,47 @@ class SSH:
         except:
             self.close()
 
+    def django_bytes_to_ssh(self, data):
+        try:
+            self.channel.send(data)
+        except:
+            self.close()
+
     def websocket_to_django(self):
         try:
             while True:
-                data = self.channel.recv(1024).decode('utf-8')
-                if not len(data):
-                    return
-                self.message['status'] = 0
-                self.message['message'] = data
-                self.res += data
-                message = json.dumps(self.message)
-                self.websocker.send(message)
+                if self.zmodemOO:
+                    self.zmodemOO = False
+                    data = self.channel.recv(2)
+                    if not len(data):
+                        return
+                    if data == b'OO':
+                        self.websocker.send(bytes_data=data)
+                        continue
+                    else:
+                        data = data + self.channel.recv(4096)
+                else:
+                    data = self.channel.recv(4096)
+                    if not len(data):
+                        return
+
+                if self.zmodem:
+                    if zmodemszend in data or zmodemrzend in data:
+                        self.zmodem = False
+                        if zmodemszend in data:
+                            self.zmodemOO = True
+                    self.websocker.send(bytes_data=data)
+                else:
+                    if zmodemszstart in data or zmodemrzstart in data:
+                        self.zmodem = True
+                        self.websocker.send(bytes_data=data)
+                    else:
+                        data = data.decode('utf-8')
+                        self.message['status'] = 0
+                        self.message['message'] = data
+                        self.res += data
+                        message = json.dumps(self.message)
+                        self.websocker.send(message)
         except:
             self.close()
 
@@ -85,8 +122,8 @@ class SSH:
         self.message['message'] = 'connection closed...'
         message = json.dumps(self.message)
         self.websocker.send(message)
-        self.channel.close()
         self.websocker.close()
+        self.channel.close()
 
     def shell(self, data):
         # 原作者使用创建线程的方式发送数据到ssh，每次发送都是一个字符，可以不用线程

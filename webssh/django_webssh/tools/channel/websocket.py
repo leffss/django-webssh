@@ -87,20 +87,24 @@ class WebSSH(WebsocketConsumer):
             pass
         finally:
             # 过滤点结果中的颜色字符
-            res = re.sub('(\[\d{2};\d{2}m|\[0m)', '', self.ssh.res)
-            print('命令: ')
-            print(self.ssh.cmd)
-            print('结果: ')
-            print(res)
+            # res = re.sub('(\[\d{2};\d{2}m|\[0m)', '', self.ssh.res)
+            # print('命令: ')
+            # print(self.ssh.cmd)
+            # print('结果: ')
+            # print(res)
+            pass
 
     def receive(self, text_data=None, bytes_data=None):
-        data = json.loads(text_data)
-        if type(data) == dict:
-            status = data['status']
-            if status == 0:
-                data = data['data']
-                self.ssh.shell(data)
-            else:
-                cols = data['cols']
-                rows = data['rows']
-                self.ssh.resize_pty(cols=cols, rows=rows)
+        if text_data is None:
+            self.ssh.django_bytes_to_ssh(bytes_data)
+        else:
+            data = json.loads(text_data)
+            if type(data) == dict:
+                status = data['status']
+                if status == 0:
+                    data = data['data']
+                    self.ssh.shell(data)
+                else:
+                    cols = data['cols']
+                    rows = data['rows']
+                    self.ssh.resize_pty(cols=cols, rows=rows)

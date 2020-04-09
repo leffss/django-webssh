@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <title>webssh</title>
     <link rel="icon" href="/static/favicon.ico"/>
-    <link rel="stylesheet" href="/static/xterm/xterm.css"/>
-    <link rel="stylesheet" href="/static/xterm/style.css"/>
-    <link rel="stylesheet" href="/static/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/bootstrap/3.3.7/bootstrap.min.css"/>
+    <!-- xterm v4 版本后去掉了 zmodem 插件，只能直接使用 zmodem.js 实现，但是不知道什么原因，登陆 webssh 后，第一次输出命令
+    回车后会卡顿一下才出数据，v3.14.5 就不会卡顿，v3.14.5还可以也可以直接使用 zmodem.js，所以这里使用 v3.14.5，终端功能方面
+    v3 和 v4 我没发现有什么多大的差别
+    -->
+    <!--link rel="stylesheet" href="/static/xterm/4.4.0/xterm.css"/-->
+    <link rel="stylesheet" href="/static/xterm/3.14.5/xterm.min.css"/>
     <style>
         .input-width {
             width: 20%;
@@ -104,8 +108,12 @@
 </div>
 
 
-<script src="/static/jquery.min.js"></script>
-<script src="/static/xterm/xterm.js"></script>
+<script src="/static/jquery/3.4.1/jquery.min.js"></script>
+<script src="/static/bootstrap/3.3.7/bootstrap.min.js"></script>
+<script src="/static/bootbox/5.4.0/bootbox.min.js"></script>
+<!--script src="/static/xterm/4.4.0/xterm.min.js"></script-->
+<script src="/static/xterm/3.14.5/xterm.min.js"></script>
+<script src="/static/zmodem/zmodem.devel.js"></script>
 <script src="/static/webssh.js"></script>
 
 </body>

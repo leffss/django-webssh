@@ -5,7 +5,7 @@ from django_webssh.tools.channel import routing
 application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(
         URLRouter(
-            routing.websocket_urlpatterns
+            routing.websocket_urlpatterns,
         )
     ),
 })
