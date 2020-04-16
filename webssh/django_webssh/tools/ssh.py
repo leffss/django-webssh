@@ -6,10 +6,12 @@ import traceback
 import socket
 import json
 
-zmodemszstart = b'rz\r**\x18B00000000000000\r\x8a\x11'
+zmodemszstart = b'rz\r**\x18B00000000000000\r\x8a'
 zmodemszend = b'**\x18B0800000000022d\r\x8a'
-zmodemrzstart = b'rz waiting to receive.**\x18B0100000023be50\r\x8a\x11'
+zmodemrzstart = b'rz waiting to receive.**\x18B0100000023be50\r\x8a'
 zmodemrzend = b'**\x18B0800000000022d\r\x8a'
+zmodemcancel = b'\x18\x18\x18\x18\x18\x08\x08\x08\x08\x08'
+
 
 class SSH:
     def __init__(self, websocker, message):
@@ -70,13 +72,13 @@ class SSH:
             if data == '\r':
                 data = '\n'
             self.cmd += data
-        except:
+        except Exception:
             self.close()
 
     def django_bytes_to_ssh(self, data):
         try:
             self.channel.send(data)
-        except:
+        except Exception:
             self.close()
 
     def websocket_to_django(self):
@@ -102,6 +104,8 @@ class SSH:
                         self.zmodem = False
                         if zmodemszend in data:
                             self.zmodemOO = True
+                    if zmodemcancel in data:
+                        self.zmodem = False
                     self.websocker.send(bytes_data=data)
                 else:
                     if zmodemszstart in data or zmodemrzstart in data:

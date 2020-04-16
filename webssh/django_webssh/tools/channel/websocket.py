@@ -88,8 +88,8 @@ class WebSSH(WebsocketConsumer):
         finally:
             # 过滤点结果中的颜色字符
             # res = re.sub('(\[\d{2};\d{2}m|\[0m)', '', self.ssh.res)
-            # print('命令: ')
-            # print(self.ssh.cmd)
+            print('命令: ')
+            print(self.ssh.cmd)
             # print('结果: ')
             # print(res)
             pass
