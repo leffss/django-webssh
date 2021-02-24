@@ -1,5 +1,5 @@
 ## 说明
-基于 python3.7 + django 2.2.3 实现的 django-webshell，参考 https://github.com/huyuan1999/django-webssh。在参考项目的基础上做了一些优化：新增前端页面刷新确认页面（刷新会导致 websocket 连接断开）、后端 paramiko 线程创建代码优化、记录命令记录以及结果、支持 zmodem 上传下载文件(rz, sz)。有兴趣的同学可以在此基础上稍作修改集成到自己的堡垒机中。
+基于 python3.7 + django 2.2.3 实现的 django-webshell，参考 https://github.com/huyuan1999/django-webssh 。在参考项目的基础上做了一些优化：新增前端页面刷新确认页面（刷新会导致 websocket 连接断开）、后端 paramiko 线程创建代码优化、记录命令记录以及结果、支持 zmodem 上传下载文件(rz, sz)。有兴趣的同学可以在此基础上稍作修改集成到自己的堡垒机中。
 
 ### 所需技术: 
 - websocket 目前市面上大多数的 webssh 都是基于 websocket 协议完成的
